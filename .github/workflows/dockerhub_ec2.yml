@@ -1,0 +1,72 @@
+name: CI/CD to EC2
+
+on:
+  push:
+    branches: [ "test" ]
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker Image
+        run: docker build -t kevinseya/customer_creation_notification:latest .
+
+      - name: Push Docker Image
+        run: docker push kevinseya/customer_creation_notification:latest
+
+  deploy-to-ec2:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH key for EC2 access
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_PRIVATE_KEY }}
+
+      - name: SSH into EC2 and deploy container
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_DNS }} << 'EOF'
+            # 1) Verificar si Docker está instalado, si no, instalarlo.
+            if ! command -v docker &> /dev/null
+            then
+              echo "Docker no está instalado. Procediendo con la instalación..."
+              sudo yum update -y
+              sudo yum install -y docker         
+              sudo systemctl start docker
+              sudo systemctl enable docker
+            else
+              echo "Docker ya está instalado."
+            fi
+
+            # 2) Bajar la imagen de Docker Hub
+            docker pull kevinseya/customer_creation_notification:latest
+
+            # 3) Detener y eliminar el contenedor anterior
+            sudo docker ps -q -f name=customer_creation_notification && sudo docker stop user_creation_notification
+            sudo docker rm customer_creation_notification || true
+
+            # 4) Generar .env con secretos
+            echo "MONGO_URL=${{ secrets.MONGO_URL }}" > .env
+            echo "MONGO_DB_NAME=${{ secrets.MONGO_DB_NAME }}" >> .env
+            echo "MONGO_COLLECTION=${{ secrets.MONGO_COLLECTION }}" >> .env
+            echo "MAIL_SERVER=${{ secrets.MAIL_SERVER }}" >> .env
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+            echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+            echo "MAIL_USE_TLS=${{ secrets.MAIL_USE_TLS }}" >> .env
+            echo "MAIL_USE_SSL=${{ secrets.MAIL_USE_SSL }}" >> .env
+            echo "PORT=${{ secrets.PORT }}" >> .env
+            cat .env
+          
+            # 5) Correr contenedor usando ese .env
+            sudo docker run -d --name user_creation_notification \
+              --env-file .env \
+              -p 5000:5000 \
+              kevinseya/user_creation_notification:latest || (echo "Error al ejecutar el contenedor." && exit 1)
+          EOF
