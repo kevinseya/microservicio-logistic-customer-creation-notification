@@ -1,0 +1,45 @@
+__pycache__/
+*.pyc
+*.pyo
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+
+# IDEs and Editors
+.vscode/
+*.swp
+*.swo
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Pipenv and Poetry
+Pipfile
+Pipfile.lock
+
+# Python Packaging
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook checkpoints (if applicable)
+.ipynb_checkpoints/
+
+# Coverage reports
+htmlcov/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Logs and Database
+*.log
+*.sqlite3
