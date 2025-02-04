@@ -8,7 +8,7 @@ __pycache__/
 *$py.class
 
 # Virtual environment
-venv/
+entorno_notificacion/
 .env
 
 # IDEs and Editors
