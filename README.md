@@ -3,7 +3,7 @@
 
 This project is a microservice built in Python using **FastAPI** that manages customer creation notifications via email. It is responsible for sending notifications when a new customer is registered in the system.
 
-## 📂 Project Structure
+## 📂 Project Structure.
 
 - **`app.py`**: Main entry point of the FastAPI application.
 - **`config/config.py`**: Configuration settings for the project.
