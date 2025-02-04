@@ -34,5 +34,5 @@ def send_email(recipient, subject, body):
             mail.send(msg)
         return True
     except Exception as e:
-        print(f"Error to sent mail.: {e}")
+        print(f"Error to sent mail: {e}")
         return False
