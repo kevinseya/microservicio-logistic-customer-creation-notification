@@ -10,7 +10,6 @@ COPY . .
 
 EXPOSE 5000
 
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=production
+ENV PORT=5000
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["uvicorn", "app:app", "--host=0.0.0.0", "--port=5000"]
