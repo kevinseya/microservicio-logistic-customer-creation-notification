@@ -48,7 +48,7 @@ jobs:
             docker pull kevinseya/customer_creation_notification:latest
 
             # 3) Detener y eliminar el contenedor anterior
-            sudo docker ps -q -f name=customer_creation_notification && sudo docker stop user_creation_notification
+            sudo docker ps -q -f name=customer_creation_notification && sudo docker stop customer_creation_notification
             sudo docker rm customer_creation_notification || true
 
             # 4) Generar .env con secretos
@@ -65,8 +65,8 @@ jobs:
             cat .env
           
             # 5) Correr contenedor usando ese .env
-            sudo docker run -d --name user_creation_notification \
+            sudo docker run -d --name customer_creation_notification \
               --env-file .env \
               -p 5000:5000 \
-              kevinseya/user_creation_notification:latest || (echo "Error al ejecutar el contenedor.." && exit 1)
+              kevinseya/user_customer_notification:latest || (echo "Error al ejecutar el contenedor.." && exit 1)
           EOF
