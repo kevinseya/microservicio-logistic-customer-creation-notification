@@ -68,9 +68,5 @@ jobs:
             sudo docker run -d --name user_creation_notification \
               --env-file .env \
               -p 5000:5000 \
-<<<<<<< HEAD
               kevinseya/user_creation_notification:latest || (echo "Error al ejecutar el contenedor.." && exit 1)
-=======
-              kevinseya/user_creation_notification:latest || (echo "Error al ejecutar el contenedor." && exit 1)
->>>>>>> f7adc7486df3ab9c80a8e4b47e5f0599b5545cb6
           EOF
