@@ -12,34 +12,34 @@ def notify_customer(notification: Notification):
     try:
         print("📌 Recibiendo datos:", notification.dict())
 
-        # ✅ Verificar si la notificación ya existe en MongoDB
+        #  Check if the notification already exists in MongoDB
         if check_notification_exists(notification.customer_id):
-            print("⚠️ Notificación ya enviada previamente, no se enviará otra vez.")
-            return {"message": "La notificación ya fue enviada previamente."}
+            print("Notification already sent previously, will not be sent again.")
+            return {"message": "The notification has already been sent previously."}
 
-        # ✅ Guardar en MongoDB
+        # Save to MongoDB
         save_notification(notification.dict())
 
-        # ✅ Enviar correo de notificación
+        # Send notification email
         subject = "Bienvenido a nuestro servicio"
         body = f"Hola {notification.name},\n\n{notification.message}\n\nSaludos,\nEquipo de soporte"
         send_email(notification.email, subject, body)
 
-        return {"message": "Notificación enviada y guardada en MongoDB"}
+        return {"message": "Notification sent and saved in MongoDB"}
 
     except Exception as e:
-        print("❌ Error en el servidor:", str(e))
+        print("Server error:", str(e))
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
-# ✅ Nuevo endpoint para verificar si la notificación ya existe en MongoDB
+# New endpoint to check if the notification already exists in MongoDB
 @app.get("/check_notification")
 def check_notification(customer_id: str):
     try:
         exists = check_notification_exists(customer_id)
         return {"exists": exists}
     except Exception as e:
-        print("❌ Error al verificar la notificación:", str(e))
+        print("Error verifying notification:", str(e))
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
