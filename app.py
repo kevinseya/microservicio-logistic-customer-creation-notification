@@ -21,9 +21,76 @@ def notify_customer(notification: Notification):
         save_notification(notification.dict())
 
         # ✅ Enviar correo de notificación
-        subject = "Bienvenido a nuestro servicio"
-        body = f"Hola {notification.name},\n\n{notification.message}\n\nSaludos,\nEquipo de soporte"
-        send_email(notification.email, subject, body)
+        email_sent = send_email(
+    recipient=notification.email,
+    subject="🎉 Bienvenido a Nuestro Servicio",
+    body=f"""
+    <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 20px;
+                }}
+                .container {{
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    padding: 25px;
+                    max-width: 500px;
+                    margin: auto;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    text-align: center;
+                }}
+                h1 {{
+                    color: #333;
+                    font-size: 22px;
+                    margin-bottom: 15px;
+                }}
+                p {{
+                    color: #555;
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin: 8px 0;
+                }}
+                .highlight {{
+                    color: #007BFF;
+                    font-weight: bold;
+                }}
+                .customer-box {{
+                    background-color: #f9f9f9;
+                    padding: 15px;
+                    border-radius: 8px;
+                    border: 1px solid #ddd;
+                    margin-top: 15px;
+                    text-align: left;
+                }}
+                .footer {{
+                    margin-top: 20px;
+                    font-size: 14px;
+                    color: #777;
+                    text-align: center;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>🎉 ¡Bienvenido a Nuestro Servicio! 🎉</h1>
+                <p>Hola <strong class="highlight">{notification.name}</strong>,</p>
+                <p>Estamos felices de tenerte con nosotros. Aquí tienes un mensaje especial:</p>
+                
+                <div class="customer-box">
+                    <p><strong>📩 Mensaje:</strong> <span class="highlight">{notification.message}</span></p>
+                </div>
+
+                <p class="footer">Gracias por confiar en nosotros. ¡Esperamos brindarte la mejor experiencia! 🚀</p>
+            </div>
+        </body>
+    </html>
+    """,
+    is_html=True  
+)
 
         return {"message": "Notificación enviada y guardada en MongoDB"}
 

@@ -8,7 +8,7 @@ class Notification(BaseModel):
     name: str
     lastname: str
     email: EmailStr
-    message: Optional[str] = "Bienvenido a nuestro servicio"
+    message: Optional[str] = "Bienvenido a Logistic y Delivery ✨"
     date: datetime = datetime.utcnow()
 
     def to_dict(self):

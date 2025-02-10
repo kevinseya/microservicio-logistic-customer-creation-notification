@@ -21,7 +21,7 @@ app.config["MAIL_USE_SSL"] = MAIL_USE_SSL
 
 mail = Mail(app)
 
-def send_email(recipient, subject, body):
+def send_email(recipient, subject, body, is_html=False):
     """
     Sent a mail of notification.
     """
@@ -29,7 +29,10 @@ def send_email(recipient, subject, body):
         msg = Message(subject=subject,
                       sender=MAIL_USERNAME,
                       recipients=[recipient])
-        msg.body = body
+        
+        if is_html:
+            msg.html = body  
+            msg.body = body
         with app.app_context():
             mail.send(msg)
         return True
