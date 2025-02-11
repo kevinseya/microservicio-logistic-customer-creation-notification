@@ -11,7 +11,7 @@ MAIL_USE_SSL = Config.MAIL_USE_SSL
 
 app = Flask(__name__)
 
-# Configuración de Flask-Mail
+# Flask-Mail Configuration
 app.config["MAIL_SERVER"] = MAIL_SERVER
 app.config["MAIL_PORT"] = MAIL_PORT
 app.config["MAIL_USERNAME"] = MAIL_USERNAME

@@ -44,14 +44,14 @@ jobs:
               sudo systemctl enable docker
             fi
 
-            # Bajar la imagen
+            # Download the image
             sudo docker pull kevinseya/customer_creation_notification:latest
 
-            # Detener y eliminar contenedor anterior
+            # Stop and remove previous container
             sudo docker stop customer_creation_notification || true
             sudo docker rm customer_creation_notification || true
 
-            # Generar archivo .env
+            # Generate .env file
             echo "MONGO_URL=${{ secrets.MONGO_URL }}" > .env
             echo "MONGO_DB_NAME=${{ secrets.MONGO_DB_NAME }}" >> .env
             echo "MONGO_COLLECTION=${{ secrets.MONGO_COLLECTION }}" >> .env
@@ -63,9 +63,9 @@ jobs:
             echo "MAIL_USE_SSL=${{ secrets.MAIL_USE_SSL }}" >> .env
             echo "PORT=${{ secrets.PORT }}" >> .env
             cat .env
-            # Ejecutar nuevo contenedor
+            # Run new container
             sudo docker run -d --name customer_creation_notification \
               --env-file .env \
-              -p 5000:5000 \
+              -p 5002:5002 \
               kevinseya/customer_creation_notification:latest
           EOF
