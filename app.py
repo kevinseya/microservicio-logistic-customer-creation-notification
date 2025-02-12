@@ -21,10 +21,10 @@ def notify_customer(notification: Notification):
         # Save to MongoDB
         save_notification(notification.dict())
 
-        # ✅ Enviar correo de notificación
+        # Send notification email
         email_sent = send_email(
     recipient=notification.email,
-    subject="🎉 Bienvenido a Nuestro Servicio",
+    subject="🎉Welcome to Our Service",
     body=f"""
     <html>
         <head>
@@ -77,15 +77,15 @@ def notify_customer(notification: Notification):
         </head>
         <body>
             <div class="container">
-                <h1>🎉 ¡Bienvenido a Nuestro Servicio! 🎉</h1>
+                <h1>🎉 Welcome to Our Service! 🎉</h1>
                 <p>Hola <strong class="highlight">{notification.name}</strong>,</p>
-                <p>Estamos felices de tenerte con nosotros. Aquí tienes un mensaje especial:</p>
+                <p>We are happy to have you with us. Here is a special message for you:</p>
                 
                 <div class="customer-box">
-                    <p><strong>📩 Mensaje:</strong> <span class="highlight">{notification.message}</span></p>
+                    <p><strong>📩 Message:</strong> <span class="highlight">{notification.message}</span></p>
                 </div>
 
-                <p class="footer">Gracias por confiar en nosotros. ¡Esperamos brindarte la mejor experiencia! 🚀</p>
+                <p class="footer">Thank you for trusting us. We look forward to providing you with the best experience! 🚀</p>
             </div>
         </body>
     </html>
@@ -95,7 +95,7 @@ def notify_customer(notification: Notification):
 
         # Send notification email
         subject = "Bienvenido a nuestro servicio"
-        body = f"Hola {notification.name},\n\n{notification.message}\n\nSaludos,\nEquipo de soporte"
+        body = f"Hola {notification.name},\n\n{notification.message}\n\nGreetings,\nSupport Team"
         send_email(notification.email, subject, body)
 
         return {"message": "Notification sent and saved in MongoDB"}
